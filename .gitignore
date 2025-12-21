@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+.env
+.env.*
+.env.local
+venv/
+.venv/
+ENV/
+env/
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+.pytest_cache
+.py[cod]
+*.pyo
+*~
+*.swp
+.DS_Store
+instance/
+.webassets-cache
+# Django
+*.log
+local_settings.py
+db.sqlite3
+media
+staticfiles
+# VSCode
+.vscode/
+# PyCharm
+.idea/
