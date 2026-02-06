@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+/* ══════════════════════════════════════════════════════
+   PokéVault — Corporate PokéMart Theme
+   ══════════════════════════════════════════════════════ */
+
+@theme {
+  --color-pokered: #DC2626;
+  --color-pokered-dark: #991B1B;
+  --color-pokered-light: #FCA5A5;
+  --color-pokeblue: #1E40AF;
+  --color-pokeblue-dark: #1E3A5F;
+  --color-pokeblue-light: #93C5FD;
+  --color-pokeyellow: #F59E0B;
+  --color-pokeyellow-dark: #B45309;
+  --color-pokeyellow-light: #FDE68A;
+  --color-pokegold: #D97706;
+  --color-sidebar: #111827;
+  --color-sidebar-hover: #1F2937;
+  --color-surface: #F9FAFB;
+  --color-card: #FFFFFF;
+  --color-success: #059669;
+  --color-danger: #DC2626;
+  --color-warning: #D97706;
+  --color-info: #2563EB;
+}
+
+/* Base font */
+body {
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background-color: #F3F4F6;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #93C5FD;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #1E40AF;
+}
+
+/* Pokéball spinner animation */
+@keyframes pokespin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.pokespin {
+  animation: pokespin 1s linear infinite;
+}
+
+/* Fade transitions for router */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Slide up for modals */
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.3s ease;
+}
+.slide-up-enter-from,
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Table row hover */
+.table-row-hover {
+  transition: background-color 0.15s ease;
+}
+.table-row-hover:hover {
+  background-color: #EFF6FF;
+}
+
+/* Status badge pulse */
+@keyframes pulse-red {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
+}
+.pulse-danger {
+  animation: pulse-red 2s infinite;
+}
+
+/* Gradient backgrounds */
+.bg-pokemart-gradient {
+  background: linear-gradient(135deg, #1E40AF 0%, #111827 100%);
+}
+
+.bg-pokeball-pattern {
+  background-image: radial-gradient(circle at 20% 50%, rgba(220, 38, 38, 0.05) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(30, 64, 175, 0.05) 0%, transparent 50%),
+                    radial-gradient(circle at 60% 80%, rgba(245, 158, 11, 0.05) 0%, transparent 50%);
+}

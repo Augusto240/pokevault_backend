@@ -39,3 +39,7 @@ staticfiles
 .vscode/
 # PyCharm
 .idea/
+
+# Node / Frontend
+node_modules/
+frontend/dist/
