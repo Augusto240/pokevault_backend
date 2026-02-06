@@ -5,26 +5,28 @@
    Minimalist + Game-Inspired Aesthetic
    ══════════════════════════════════════════════════════ */
 
-@theme {
-  --color-pokered: #DC2626;
-  --color-pokered-dark: #991B1B;
-  --color-pokered-light: #FCA5A5;
-  --color-pokeblue: #1E40AF;
-  --color-pokeblue-dark: #1E3A5F;
-  --color-pokeblue-light: #93C5FD;
-  --color-pokeyellow: #F59E0B;
-  --color-pokeyellow-dark: #B45309;
-  --color-pokeyellow-light: #FDE68A;
-  --color-pokegold: #D97706;
-  --color-sidebar: #0F172A;
-  --color-sidebar-hover: #1E293B;
-  --color-sidebar-active: #1E40AF;
-  --color-surface: #F8FAFC;
-  --color-card: #FFFFFF;
-  --color-success: #059669;
-  --color-danger: #DC2626;
-  --color-warning: #D97706;
-  --color-info: #2563EB;
+@layer base {
+  :root {
+    --color-pokered: #DC2626;
+    --color-pokered-dark: #991B1B;
+    --color-pokered-light: #FCA5A5;
+    --color-pokeblue: #1E40AF;
+    --color-pokeblue-dark: #1E3A5F;
+    --color-pokeblue-light: #93C5FD;
+    --color-pokeyellow: #F59E0B;
+    --color-pokeyellow-dark: #B45309;
+    --color-pokeyellow-light: #FDE68A;
+    --color-pokegold: #D97706;
+    --color-sidebar: #0F172A;
+    --color-sidebar-hover: #1E293B;
+    --color-sidebar-active: #1E40AF;
+    --color-surface: #F8FAFC;
+    --color-card: #FFFFFF;
+    --color-success: #059669;
+    --color-danger: #DC2626;
+    --color-warning: #D97706;
+    --color-info: #2563EB;
+  }
 }
 
 /* ── Base ── */
