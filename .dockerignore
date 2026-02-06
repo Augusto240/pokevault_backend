@@ -1,0 +1,15 @@
+# ═══════════════════════════════════════════════════════
+#  PokéVault — .dockerignore
+# ═══════════════════════════════════════════════════════
+__pycache__
+*.pyc
+*.pyo
+.venv
+.env
+.git
+.gitignore
+node_modules
+frontend/node_modules
+frontend/dist
+*.md
+.vscode

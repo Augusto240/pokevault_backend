@@ -2,14 +2,17 @@
   <div class="space-y-6">
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-      <div>
-        <h2 class="text-xl font-bold text-gray-800">Relatórios do PokéVault</h2>
-        <p class="text-sm text-gray-500">Visão analítica de estoque e movimentações</p>
+      <div class="flex items-center gap-3">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/exp-share.png" class="w-8 h-8 image-pixelated" />
+        <div>
+          <h2 class="text-xl font-bold text-slate-800">Relatórios do PokéVault</h2>
+          <p class="text-sm text-slate-400">Visão analítica de estoque e movimentações</p>
+        </div>
       </div>
       <button
         @click="refreshData"
         :disabled="loading"
-        class="flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium transition-all"
+        class="btn-pokemon bg-white border border-slate-200 hover:bg-slate-50 text-slate-700"
       >
         <ArrowPathIcon class="w-4 h-4" :class="{ 'pokespin': loading }" />
         Atualizar Dados
@@ -18,59 +21,86 @@
 
     <!-- Summary Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-        <p class="text-xs font-medium text-gray-500 uppercase">Valor Total em Estoque</p>
-        <p class="text-2xl font-bold text-gray-900 mt-2">{{ formatCurrency(valorTotalEstoque) }}</p>
-        <p class="text-xs text-gray-400 mt-1">Soma de (quantidade × preço unitário)</p>
+      <div class="card-pokemon p-5">
+        <div class="flex items-center gap-2 mb-2">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/nugget.png" class="w-5 h-5 image-pixelated" />
+          <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Valor Total em Estoque</p>
+        </div>
+        <p class="text-2xl font-bold text-slate-900">{{ formatCurrency(valorTotalEstoque) }}</p>
+        <p class="text-xs text-slate-400 mt-1">Soma de (quantidade x preço unitário)</p>
       </div>
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-        <p class="text-xs font-medium text-gray-500 uppercase">Total de Movimentações</p>
-        <p class="text-2xl font-bold text-gray-900 mt-2">{{ transacoes.length }}</p>
-        <p class="text-xs text-gray-400 mt-1">Entradas + saídas registradas</p>
+      <div class="card-pokemon p-5">
+        <div class="flex items-center gap-2 mb-2">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rare-candy.png" class="w-5 h-5 image-pixelated" />
+          <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Total de Movimentações</p>
+        </div>
+        <p class="text-2xl font-bold text-slate-900">{{ transacoes.length }}</p>
+        <p class="text-xs text-slate-400 mt-1">Entradas + saídas registradas</p>
       </div>
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-        <p class="text-xs font-medium text-gray-500 uppercase">Total Entradas</p>
-        <p class="text-2xl font-bold text-green-600 mt-2">{{ totalEntradas }}</p>
-        <p class="text-xs text-gray-400 mt-1">Itens repostos</p>
+      <div class="card-pokemon p-5">
+        <div class="flex items-center gap-2 mb-2">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/potion.png" class="w-5 h-5 image-pixelated" />
+          <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Total Entradas</p>
+        </div>
+        <p class="text-2xl font-bold text-emerald-600">{{ totalEntradas }}</p>
+        <p class="text-xs text-slate-400 mt-1">Itens repostos</p>
       </div>
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-        <p class="text-xs font-medium text-gray-500 uppercase">Total Saídas</p>
-        <p class="text-2xl font-bold text-red-600 mt-2">{{ totalSaidas }}</p>
-        <p class="text-xs text-gray-400 mt-1">Itens vendidos/distribuídos</p>
+      <div class="card-pokemon p-5">
+        <div class="flex items-center gap-2 mb-2">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/x-attack.png" class="w-5 h-5 image-pixelated" />
+          <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Total Saídas</p>
+        </div>
+        <p class="text-2xl font-bold text-red-600">{{ totalSaidas }}</p>
+        <p class="text-xs text-slate-400 mt-1">Itens vendidos/distribuídos</p>
       </div>
     </div>
 
     <!-- Charts Row -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- Transactions by type (Pie) -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h3 class="text-sm font-semibold text-gray-700 mb-4">Proporção Entradas vs Saídas</h3>
+      <div class="card-pokemon p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" class="w-5 h-5 image-pixelated" />
+          <h3 class="text-sm font-semibold text-slate-700">Proporção Entradas vs Saídas</h3>
+        </div>
         <div class="h-64">
           <Doughnut v-if="pieData" :data="pieData" :options="pieOptions" />
+          <div v-else class="flex items-center justify-center h-full text-slate-300 text-sm">Sem dados</div>
         </div>
       </div>
 
       <!-- Top items by stock -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h3 class="text-sm font-semibold text-gray-700 mb-4">Top 10 — Itens por Quantidade em Estoque</h3>
+      <div class="card-pokemon p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png" class="w-5 h-5 image-pixelated" />
+          <h3 class="text-sm font-semibold text-slate-700">Top 10 — Itens por Quantidade em Estoque</h3>
+        </div>
         <div class="h-64">
           <Bar v-if="topItemsData" :data="topItemsData" :options="barOptions" />
+          <div v-else class="flex items-center justify-center h-full text-slate-300 text-sm">Sem dados</div>
         </div>
       </div>
     </div>
 
     <!-- Movimentações por item -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-      <h3 class="text-sm font-semibold text-gray-700 mb-4">Movimentação por Item (Quantidade total movimentada)</h3>
+    <div class="card-pokemon p-6">
+      <div class="flex items-center gap-2 mb-4">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png" class="w-5 h-5 image-pixelated" />
+        <h3 class="text-sm font-semibold text-slate-700">Movimentação por Item (Quantidade total movimentada)</h3>
+      </div>
       <div class="h-72">
         <Bar v-if="movPerItemData" :data="movPerItemData" :options="stackedBarOptions" />
+        <div v-else class="flex items-center justify-center h-full text-slate-300 text-sm">Sem dados</div>
       </div>
     </div>
 
     <!-- Detailed inventory table -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-      <div class="p-6 border-b border-gray-100">
-        <h3 class="text-sm font-semibold text-gray-700">Relatório Detalhado de Estoque</h3>
+    <div class="card-pokemon overflow-hidden">
+      <div class="p-6 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/scope-lens.png" class="w-5 h-5 image-pixelated" />
+          <h3 class="text-sm font-semibold text-slate-700">Relatório Detalhado de Estoque</h3>
+        </div>
       </div>
       <div v-if="loading" class="flex items-center justify-center h-32">
         <div class="w-8 h-8 border-3 border-pokeblue border-t-transparent rounded-full pokespin"></div>
@@ -78,28 +108,33 @@
       <div v-else class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="bg-gray-50 text-xs text-gray-500 uppercase">
-              <th class="py-3 px-4 text-left font-medium">Item</th>
-              <th class="py-3 px-4 text-left font-medium">Categoria</th>
-              <th class="py-3 px-4 text-center font-medium">Qtd</th>
-              <th class="py-3 px-4 text-center font-medium">Limite</th>
-              <th class="py-3 px-4 text-right font-medium">Preço Unit.</th>
-              <th class="py-3 px-4 text-right font-medium">Valor Total</th>
-              <th class="py-3 px-4 text-center font-medium">Status</th>
+            <tr class="bg-slate-50/80 text-[10px] text-slate-400 uppercase tracking-wider">
+              <th class="py-3 px-4 text-left font-semibold">Item</th>
+              <th class="py-3 px-4 text-left font-semibold">Categoria</th>
+              <th class="py-3 px-4 text-center font-semibold">Qtd</th>
+              <th class="py-3 px-4 text-center font-semibold">Limite</th>
+              <th class="py-3 px-4 text-right font-semibold">Preço Unit.</th>
+              <th class="py-3 px-4 text-right font-semibold">Valor Total</th>
+              <th class="py-3 px-4 text-center font-semibold">Status</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-50">
+          <tbody class="divide-y divide-slate-50">
             <tr v-for="item in itens" :key="item.id" class="table-row-hover">
-              <td class="py-3 px-4 font-medium text-gray-800">{{ item.nome }}</td>
-              <td class="py-3 px-4 text-gray-500">{{ item.categoria_nome }}</td>
-              <td class="py-3 px-4 text-center font-semibold">{{ item.quantidade }}</td>
-              <td class="py-3 px-4 text-center text-gray-400">{{ item.limite_minimo }}</td>
-              <td class="py-3 px-4 text-right text-gray-600">{{ formatCurrency(item.preco_unitario) }}</td>
-              <td class="py-3 px-4 text-right font-semibold text-gray-800">{{ formatCurrency(item.quantidade * item.preco_unitario) }}</td>
+              <td class="py-3 px-4">
+                <div class="flex items-center gap-2">
+                  <SpriteIcon :name="item.nome" size="sm" />
+                  <span class="font-medium text-slate-800">{{ item.nome }}</span>
+                </div>
+              </td>
+              <td class="py-3 px-4 text-slate-500">{{ item.categoria_nome }}</td>
+              <td class="py-3 px-4 text-center font-semibold text-slate-800">{{ item.quantidade }}</td>
+              <td class="py-3 px-4 text-center text-slate-400">{{ item.limite_minimo }}</td>
+              <td class="py-3 px-4 text-right text-slate-500">{{ formatCurrency(item.preco_unitario) }}</td>
+              <td class="py-3 px-4 text-right font-semibold text-slate-800">{{ formatCurrency(item.quantidade * item.preco_unitario) }}</td>
               <td class="py-3 px-4 text-center">
                 <span :class="[
-                  'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold',
-                  item.status_estoque === 'CRITICO' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
+                  'badge-pokemon',
+                  item.status_estoque === 'CRITICO' ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'
                 ]">
                   {{ item.status_estoque === 'CRITICO' ? '⚠ Crítico' : '✓ OK' }}
                 </span>
@@ -107,8 +142,13 @@
             </tr>
           </tbody>
           <tfoot>
-            <tr class="bg-gray-50 font-semibold">
-              <td class="py-3 px-4" colspan="5">TOTAL GERAL</td>
+            <tr class="bg-slate-50/80 font-semibold">
+              <td class="py-3 px-4" colspan="5">
+                <div class="flex items-center gap-2">
+                  <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/nugget.png" class="w-4 h-4 image-pixelated" />
+                  TOTAL GERAL
+                </div>
+              </td>
               <td class="py-3 px-4 text-right text-pokeblue text-base">{{ formatCurrency(valorTotalEstoque) }}</td>
               <td></td>
             </tr>
@@ -123,6 +163,7 @@
 import { ref, computed, onMounted } from 'vue'
 import api from '../services/api'
 import { Bar, Doughnut } from 'vue-chartjs'
+import SpriteIcon from '../components/SpriteIcon.vue'
 import {
   Chart as ChartJS,
   CategoryScale,

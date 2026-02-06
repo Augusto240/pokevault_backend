@@ -2,13 +2,16 @@
   <div class="space-y-6">
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-      <div>
-        <h2 class="text-xl font-bold text-gray-800">Gestão de Funcionários</h2>
-        <p class="text-sm text-gray-500">Cadastro e gerenciamento de acesso — Apenas Gerentes</p>
+      <div class="flex items-center gap-3">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lucky-egg.png" class="w-8 h-8 image-pixelated" />
+        <div>
+          <h2 class="text-xl font-bold text-slate-800">Gestão de Funcionários</h2>
+          <p class="text-sm text-slate-400">Cadastro e gerenciamento de acesso — Apenas Gerentes</p>
+        </div>
       </div>
       <button
         @click="openCreate"
-        class="flex items-center gap-2 bg-pokeblue hover:bg-pokeblue-dark text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm"
+        class="btn-pokemon bg-pokeblue hover:bg-pokeblue-dark text-white"
       >
         <PlusIcon class="w-4 h-4" />
         Novo Funcionário
@@ -16,55 +19,58 @@
     </div>
 
     <!-- Users table -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="card-pokemon overflow-hidden">
       <div v-if="loading" class="flex items-center justify-center h-48">
         <div class="w-10 h-10 border-4 border-pokeblue border-t-transparent rounded-full pokespin"></div>
       </div>
-      <div v-else-if="users.length === 0" class="flex flex-col items-center justify-center py-16 text-gray-400">
-        <UsersIcon class="w-12 h-12 mb-3" />
+      <div v-else-if="users.length === 0" class="flex flex-col items-center justify-center py-16 text-slate-400">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lucky-egg.png" class="w-12 h-12 image-pixelated mb-3 opacity-30" />
         <p class="text-sm">Nenhum funcionário cadastrado.</p>
       </div>
       <div v-else class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="bg-gray-50 text-xs text-gray-500 uppercase">
-              <th class="py-3 px-4 text-left font-medium">Funcionário</th>
-              <th class="py-3 px-4 text-left font-medium">E-mail</th>
-              <th class="py-3 px-4 text-left font-medium">Matrícula</th>
-              <th class="py-3 px-4 text-center font-medium">Perfil</th>
-              <th class="py-3 px-4 text-center font-medium">Ações</th>
+            <tr class="bg-slate-50/80 text-[10px] text-slate-400 uppercase tracking-wider">
+              <th class="py-3 px-4 text-left font-semibold">Funcionário</th>
+              <th class="py-3 px-4 text-left font-semibold">E-mail</th>
+              <th class="py-3 px-4 text-left font-semibold">Matrícula</th>
+              <th class="py-3 px-4 text-center font-semibold">Perfil</th>
+              <th class="py-3 px-4 text-center font-semibold">Ações</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-50">
+          <tbody class="divide-y divide-slate-50">
             <tr v-for="u in users" :key="u.id" class="table-row-hover">
               <td class="py-3 px-4">
                 <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0"
-                       :class="u.role === 'GERENTE' ? 'bg-pokeyellow' : 'bg-pokeblue'">
-                    {{ getInitials(u) }}
+                  <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden"
+                       :class="u.role === 'GERENTE' ? 'bg-amber-50 ring-2 ring-amber-300' : 'bg-blue-50 ring-2 ring-blue-300'">
+                    <img
+                      :src="u.role === 'GERENTE' ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png' : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'"
+                      class="w-6 h-6 image-pixelated"
+                    />
                   </div>
                   <div>
-                    <p class="font-medium text-gray-800">{{ u.first_name }} {{ u.last_name }}</p>
-                    <p class="text-xs text-gray-400">@{{ u.username }}</p>
+                    <p class="font-medium text-slate-800">{{ u.first_name }} {{ u.last_name }}</p>
+                    <p class="text-xs text-slate-400">@{{ u.username }}</p>
                   </div>
                 </div>
               </td>
-              <td class="py-3 px-4 text-gray-600">{{ u.email }}</td>
-              <td class="py-3 px-4 text-gray-500 font-mono text-xs">{{ u.matricula }}</td>
+              <td class="py-3 px-4 text-slate-500">{{ u.email }}</td>
+              <td class="py-3 px-4 text-slate-400 font-mono text-xs">{{ u.matricula }}</td>
               <td class="py-3 px-4 text-center">
                 <span :class="[
-                  'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold',
-                  u.role === 'GERENTE' ? 'bg-yellow-100 text-yellow-700' : 'bg-blue-100 text-blue-700'
+                  'badge-pokemon',
+                  u.role === 'GERENTE' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'
                 ]">
                   {{ u.role === 'GERENTE' ? '★ Gerente' : '◆ Estoquista' }}
                 </span>
               </td>
               <td class="py-3 px-4 text-center">
                 <div class="flex items-center justify-center gap-1">
-                  <button @click="openEdit(u)" class="p-1.5 rounded-lg hover:bg-blue-50 text-gray-400 hover:text-pokeblue transition-colors" title="Editar">
+                  <button @click="openEdit(u)" class="p-1.5 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-pokeblue transition-colors" title="Editar">
                     <PencilSquareIcon class="w-4 h-4" />
                   </button>
-                  <button @click="confirmDelete(u)" class="p-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-pokered transition-colors" title="Excluir">
+                  <button @click="confirmDelete(u)" class="p-1.5 rounded-lg hover:bg-red-50 text-slate-400 hover:text-pokered transition-colors" title="Excluir">
                     <TrashIcon class="w-4 h-4" />
                   </button>
                 </div>
@@ -78,49 +84,59 @@
     <!-- Create/Edit Modal -->
     <ModalDialog :show="showModal" :title="editing ? 'Editar Funcionário' : 'Novo Funcionário'" @close="closeModal">
       <form @submit.prevent="save" class="space-y-4">
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Nome</label>
-            <input v-model="form.first_name" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue" placeholder="Ash" />
+        <!-- Sprite avatar preview -->
+        <div class="flex justify-center">
+          <div class="w-14 h-14 rounded-full flex items-center justify-center"
+               :class="form.role === 'GERENTE' ? 'bg-amber-50 ring-2 ring-amber-300' : 'bg-blue-50 ring-2 ring-blue-300'">
+            <img
+              :src="form.role === 'GERENTE' ? 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png' : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'"
+              class="w-9 h-9 image-pixelated"
+            />
           </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Sobrenome</label>
-            <input v-model="form.last_name" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue" placeholder="Ketchum" />
-          </div>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
-          <input v-model="form.username" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue" placeholder="ashketchum" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-          <input v-model="form.email" type="email" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue" placeholder="ash@pokevault.com" />
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Matrícula</label>
-            <input v-model="form.matricula" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue" placeholder="2024001" />
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Nome</label>
+            <input v-model="form.first_name" required class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue/30 bg-slate-50 focus:bg-white" placeholder="Ash" />
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Perfil</label>
-            <select v-model="form.role" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue bg-white">
-              <option value="ESTOQUISTA">Estoquista</option>
-              <option value="GERENTE">Gerente</option>
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Sobrenome</label>
+            <input v-model="form.last_name" required class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue/30 bg-slate-50 focus:bg-white" placeholder="Ketchum" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Username</label>
+          <input v-model="form.username" required class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue/30 bg-slate-50 focus:bg-white" placeholder="ashketchum" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">E-mail</label>
+          <input v-model="form.email" type="email" required class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue/30 bg-slate-50 focus:bg-white" placeholder="ash@pokevault.com" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Matrícula</label>
+            <input v-model="form.matricula" required class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue/30 bg-slate-50 focus:bg-white" placeholder="2024001" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Perfil</label>
+            <select v-model="form.role" required class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue/30 bg-slate-50 focus:bg-white">
+              <option value="ESTOQUISTA">◆ Estoquista</option>
+              <option value="GERENTE">★ Gerente</option>
             </select>
           </div>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
+          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
             {{ editing ? 'Nova Senha (deixe vazio para manter)' : 'Senha' }}
           </label>
-          <input v-model="form.password" :type="'password'" :required="!editing" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue" placeholder="••••••••" />
+          <input v-model="form.password" :type="'password'" :required="!editing" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue/30 bg-slate-50 focus:bg-white" placeholder="••••••••" />
         </div>
         <div v-if="formError" class="text-sm text-red-600 bg-red-50 p-3 rounded-xl">{{ formError }}</div>
       </form>
       <template #footer>
         <div class="flex justify-end gap-3">
-          <button @click="closeModal" class="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">Cancelar</button>
-          <button @click="save" :disabled="saving" class="px-6 py-2 bg-pokeblue hover:bg-pokeblue-dark text-white rounded-xl text-sm font-semibold transition-all disabled:opacity-50">
+          <button @click="closeModal" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors">Cancelar</button>
+          <button @click="save" :disabled="saving" class="btn-pokemon bg-pokeblue hover:bg-pokeblue-dark text-white disabled:opacity-50">
             {{ saving ? 'Salvando...' : (editing ? 'Atualizar' : 'Cadastrar') }}
           </button>
         </div>
@@ -129,13 +145,19 @@
 
     <!-- Delete confirmation -->
     <ModalDialog :show="showDelete" title="Confirmar Exclusão" @close="showDelete = false">
-      <p class="text-sm text-gray-600">
-        Excluir o funcionário <strong>{{ deletingUser?.first_name }} {{ deletingUser?.last_name }}</strong>? Esta ação não pode ser desfeita.
-      </p>
+      <div class="flex flex-col items-center gap-3 py-2">
+        <div class="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center ring-2 ring-red-200">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" class="w-7 h-7 image-pixelated opacity-50 grayscale" />
+        </div>
+        <p class="text-sm text-slate-600 text-center">
+          Excluir o funcionário <strong class="text-slate-800">{{ deletingUser?.first_name }} {{ deletingUser?.last_name }}</strong>?<br />
+          <span class="text-xs text-slate-400">Esta ação não pode ser desfeita.</span>
+        </p>
+      </div>
       <template #footer>
         <div class="flex justify-end gap-3">
-          <button @click="showDelete = false" class="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">Cancelar</button>
-          <button @click="doDelete" :disabled="deleting" class="px-6 py-2 bg-pokered hover:bg-pokered-dark text-white rounded-xl text-sm font-semibold transition-all disabled:opacity-50">
+          <button @click="showDelete = false" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors">Cancelar</button>
+          <button @click="doDelete" :disabled="deleting" class="btn-pokemon bg-pokered hover:bg-pokered-dark text-white disabled:opacity-50">
             {{ deleting ? 'Excluindo...' : 'Excluir' }}
           </button>
         </div>
@@ -152,7 +174,6 @@ import {
   PlusIcon,
   PencilSquareIcon,
   TrashIcon,
-  UsersIcon,
 } from '@heroicons/vue/24/outline'
 
 const users = ref([])

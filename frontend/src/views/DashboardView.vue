@@ -1,17 +1,15 @@
 <template>
   <div class="space-y-6">
     <!-- Welcome banner -->
-    <div class="bg-gradient-to-r from-pokeblue to-pokeblue-dark rounded-2xl p-6 text-white relative overflow-hidden">
-      <div class="absolute right-0 top-0 bottom-0 w-1/3 opacity-10">
-        <svg viewBox="0 0 100 100" class="w-full h-full">
-          <circle cx="50" cy="50" r="48" fill="white"/>
-          <rect x="0" y="47" width="100" height="6" fill="currentColor"/>
-          <circle cx="50" cy="50" r="12" fill="currentColor"/>
-        </svg>
+    <div class="card-pokemon bg-gradient-to-r from-pokeblue to-pokeblue-dark p-6 text-white relative overflow-hidden !border-0">
+      <div class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-2 opacity-15">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" class="w-16 h-16 image-pixelated pokefloat" style="animation-delay: 0s;" />
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png" class="w-12 h-12 image-pixelated pokefloat mt-4" style="animation-delay: 0.5s;" />
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png" class="w-14 h-14 image-pixelated pokefloat" style="animation-delay: 1s;" />
       </div>
       <div class="relative z-10">
-        <h1 class="text-2xl font-bold">Bem-vindo ao PokéVault!</h1>
-        <p class="text-blue-200 mt-1">Centro de Distribuição de Suprimentos Pokémon — Visão geral do sistema</p>
+        <h1 class="font-pixel text-xs leading-relaxed">Bem-vindo ao PokéVault!</h1>
+        <p class="text-blue-200/80 mt-2 text-sm">Centro de Distribuição — Visão geral do estoque e movimentações</p>
       </div>
     </div>
 
@@ -21,7 +19,7 @@
         title="Total de Itens"
         :value="stats.total_itens"
         subtitle="Cadastrados no sistema"
-        icon="cube"
+        :sprite="sprites.ultraBall"
         color="blue"
         :loading="loadingStats"
       />
@@ -29,7 +27,7 @@
         title="Estoque Crítico"
         :value="stats.itens_criticos"
         subtitle="Itens abaixo do limite"
-        icon="alert"
+        :sprite="sprites.xAttack"
         color="red"
         :loading="loadingStats"
         :pulse="stats.itens_criticos > 0"
@@ -38,7 +36,7 @@
         title="Movimentações Hoje"
         :value="stats.movimentacoes_hoje"
         subtitle="Entradas e saídas"
-        icon="arrows"
+        :sprite="sprites.rareCandy"
         color="yellow"
         :loading="loadingStats"
       />
@@ -46,7 +44,7 @@
         title="Categorias"
         :value="totalCategorias"
         subtitle="Tipos de suprimento"
-        icon="tag"
+        :sprite="sprites.oranBerry"
         color="green"
         :loading="loadingStats"
       />
@@ -55,9 +53,9 @@
     <!-- Charts row -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Estoque por categoria -->
-      <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h3 class="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
-          <ChartBarIcon class="w-5 h-5 text-pokeblue" />
+      <div class="lg:col-span-2 card-pokemon p-6">
+        <h3 class="text-sm font-semibold text-slate-700 mb-4 flex items-center gap-2">
+          <img :src="sprites.expShare" class="w-5 h-5 image-pixelated" />
           Estoque por Categoria
         </h3>
         <div v-if="loadingChart" class="flex items-center justify-center h-64">
@@ -65,48 +63,49 @@
         </div>
         <div v-else class="h-64">
           <Bar v-if="chartData" :data="chartData" :options="chartOptions" />
-          <p v-else class="text-gray-400 text-sm text-center mt-20">Sem dados para exibir</p>
+          <p v-else class="text-slate-400 text-sm text-center mt-20">Sem dados para exibir</p>
         </div>
       </div>
 
       <!-- Itens com estoque baixo -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h3 class="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
-          <ExclamationTriangleIcon class="w-5 h-5 text-pokered" />
+      <div class="card-pokemon p-6">
+        <h3 class="text-sm font-semibold text-slate-700 mb-4 flex items-center gap-2">
+          <img :src="sprites.xAttack" class="w-5 h-5 image-pixelated" />
           Estoque Baixo
         </h3>
         <div v-if="loadingLow" class="flex items-center justify-center h-40">
           <div class="w-8 h-8 border-3 border-pokered border-t-transparent rounded-full pokespin"></div>
         </div>
-        <div v-else-if="lowStockItems.length === 0" class="flex flex-col items-center justify-center h-40 text-gray-400">
-          <CheckCircleIcon class="w-10 h-10 text-success mb-2" />
+        <div v-else-if="lowStockItems.length === 0" class="flex flex-col items-center justify-center h-40 text-slate-400">
+          <img :src="sprites.fullRestore" class="w-10 h-10 image-pixelated mb-2 opacity-40" />
           <p class="text-sm">Nenhum item crítico!</p>
         </div>
         <ul v-else class="space-y-2 max-h-64 overflow-y-auto">
           <li
             v-for="item in lowStockItems"
             :key="item.id"
-            class="flex items-center justify-between p-3 bg-red-50 border border-red-100 rounded-xl"
+            class="flex items-center justify-between p-3 bg-red-50/60 border border-red-100 rounded-xl"
           >
-            <div>
-              <p class="text-sm font-medium text-gray-800">{{ item.nome }}</p>
-              <p class="text-xs text-gray-500">{{ item.categoria_nome }}</p>
+            <div class="flex items-center gap-2.5">
+              <SpriteIcon :name="item.nome" size="sm" />
+              <div>
+                <p class="text-sm font-medium text-slate-800">{{ item.nome }}</p>
+                <p class="text-[10px] text-slate-400">{{ item.categoria_nome }}</p>
+              </div>
             </div>
-            <div class="text-right">
-              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-700">
-                {{ item.quantidade }} / {{ item.limite_minimo }}
-              </span>
-            </div>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-700">
+              {{ item.quantidade }}/{{ item.limite_minimo }}
+            </span>
           </li>
         </ul>
       </div>
     </div>
 
     <!-- Recent transactions -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+    <div class="card-pokemon p-6">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-sm font-semibold text-gray-700 flex items-center gap-2">
-          <ArrowsRightLeftIcon class="w-5 h-5 text-pokeyellow" />
+        <h3 class="text-sm font-semibold text-slate-700 flex items-center gap-2">
+          <img :src="sprites.rareCandy" class="w-5 h-5 image-pixelated" />
           Movimentações Recentes
         </h3>
         <router-link to="/transacoes" class="text-xs text-pokeblue hover:underline font-medium">Ver todas →</router-link>
@@ -114,34 +113,41 @@
       <div v-if="loadingTransacoes" class="flex items-center justify-center h-20">
         <div class="w-8 h-8 border-3 border-pokeyellow border-t-transparent rounded-full pokespin"></div>
       </div>
-      <div v-else-if="recentTransacoes.length === 0" class="text-center text-gray-400 py-8 text-sm">
+      <div v-else-if="recentTransacoes.length === 0" class="text-center text-slate-400 py-8 text-sm">
         Nenhuma transação registrada ainda.
       </div>
       <div v-else class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="text-xs text-gray-500 uppercase border-b border-gray-100">
-              <th class="py-2 text-left font-medium">Tipo</th>
-              <th class="py-2 text-left font-medium">Item</th>
-              <th class="py-2 text-left font-medium">Qtd</th>
-              <th class="py-2 text-left font-medium">Usuário</th>
-              <th class="py-2 text-left font-medium">Data/Hora</th>
+            <tr class="text-[10px] text-slate-400 uppercase border-b border-slate-100">
+              <th class="py-2 text-left font-semibold tracking-wider">Tipo</th>
+              <th class="py-2 text-left font-semibold tracking-wider">Item</th>
+              <th class="py-2 text-left font-semibold tracking-wider">Qtd</th>
+              <th class="py-2 text-left font-semibold tracking-wider">Usuário</th>
+              <th class="py-2 text-left font-semibold tracking-wider">Data/Hora</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="t in recentTransacoes" :key="t.id" class="border-b border-gray-50 table-row-hover">
+            <tr v-for="t in recentTransacoes" :key="t.id" class="border-b border-slate-50 table-row-hover">
               <td class="py-2.5">
                 <span :class="[
-                  'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold',
-                  t.tipo === 'ENTRADA' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                  'badge-pokemon',
+                  t.tipo === 'ENTRADA' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
                 ]">
                   {{ t.tipo === 'ENTRADA' ? '↓ Entrada' : '↑ Saída' }}
                 </span>
               </td>
-              <td class="py-2.5 font-medium text-gray-800">{{ t.item_nome }}</td>
-              <td class="py-2.5 text-gray-600">{{ t.quantidade }}</td>
-              <td class="py-2.5 text-gray-500">{{ t.usuario_nome || '—' }}</td>
-              <td class="py-2.5 text-gray-400">{{ formatDate(t.data_hora) }}</td>
+              <td class="py-2.5">
+                <div class="flex items-center gap-2">
+                  <SpriteIcon :name="t.item_nome" size="sm" />
+                  <span class="font-medium text-slate-800">{{ t.item_nome }}</span>
+                </div>
+              </td>
+              <td class="py-2.5 font-semibold" :class="t.tipo === 'ENTRADA' ? 'text-emerald-600' : 'text-red-600'">
+                {{ t.tipo === 'ENTRADA' ? '+' : '-' }}{{ t.quantidade }}
+              </td>
+              <td class="py-2.5 text-slate-500">{{ t.usuario_nome || '—' }}</td>
+              <td class="py-2.5 text-slate-400">{{ formatDate(t.data_hora) }}</td>
             </tr>
           </tbody>
         </table>
@@ -149,31 +155,32 @@
     </div>
 
     <!-- IA Analysis (Gerente only) -->
-    <div v-if="authStore.isGerente" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+    <div v-if="authStore.isGerente" class="card-pokemon p-6">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-sm font-semibold text-gray-700 flex items-center gap-2">
-          <SparklesIcon class="w-5 h-5 text-pokeyellow" />
+        <h3 class="text-sm font-semibold text-slate-700 flex items-center gap-2">
+          <img :src="sprites.masterBall" class="w-5 h-5 image-pixelated" />
           Análise de IA — Tendências
         </h3>
         <button
           @click="fetchIaAnalysis"
           :disabled="loadingIA"
-          class="text-xs bg-pokeyellow/10 text-pokeyellow-dark hover:bg-pokeyellow/20 px-3 py-1.5 rounded-lg font-medium transition-colors disabled:opacity-50"
+          class="btn-pokemon text-xs bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200 disabled:opacity-50"
         >
+          <img :src="sprites.rareCandy" class="w-4 h-4 image-pixelated" />
           {{ loadingIA ? 'Analisando...' : 'Gerar Análise' }}
         </button>
       </div>
       <div v-if="loadingIA" class="flex items-center justify-center py-8">
         <div class="w-8 h-8 border-3 border-pokeyellow border-t-transparent rounded-full pokespin"></div>
-        <span class="ml-3 text-sm text-gray-500">Consultando Gemini...</span>
+        <span class="ml-3 text-sm text-slate-500">Consultando Gemini...</span>
       </div>
-      <div v-else-if="iaAnalysis" class="prose prose-sm max-w-none text-gray-700 whitespace-pre-line bg-yellow-50 border border-yellow-100 rounded-xl p-4">
+      <div v-else-if="iaAnalysis" class="prose prose-sm max-w-none text-slate-700 whitespace-pre-line bg-amber-50/50 border border-amber-100 rounded-xl p-4">
         {{ iaAnalysis }}
       </div>
       <div v-else-if="iaError" class="text-sm text-red-600 bg-red-50 p-4 rounded-xl">
         {{ iaError }}
       </div>
-      <p v-else class="text-sm text-gray-400 text-center py-4">Clique em "Gerar Análise" para consultar a IA sobre tendências do estoque.</p>
+      <p v-else class="text-sm text-slate-400 text-center py-4">Clique em "Gerar Análise" para consultar a IA sobre tendências do estoque.</p>
     </div>
   </div>
 </template>
@@ -183,6 +190,8 @@ import { ref, onMounted } from 'vue'
 import { useAuthStore } from '../stores/auth'
 import api from '../services/api'
 import StatsCard from '../components/StatsCard.vue'
+import SpriteIcon from '../components/SpriteIcon.vue'
+import { getSpriteBySlug } from '../utils/sprites'
 import { Bar } from 'vue-chartjs'
 import {
   Chart as ChartJS,
@@ -193,17 +202,21 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
-import {
-  ChartBarIcon,
-  ExclamationTriangleIcon,
-  CheckCircleIcon,
-  ArrowsRightLeftIcon,
-  SparklesIcon,
-} from '@heroicons/vue/24/outline'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const authStore = useAuthStore()
+
+// Pre-computed sprite URLs
+const sprites = {
+  ultraBall: getSpriteBySlug('ultra-ball'),
+  xAttack: getSpriteBySlug('x-attack'),
+  rareCandy: getSpriteBySlug('rare-candy'),
+  oranBerry: getSpriteBySlug('oran-berry'),
+  expShare: getSpriteBySlug('exp-share'),
+  masterBall: getSpriteBySlug('master-ball'),
+  fullRestore: getSpriteBySlug('full-restore'),
+}
 
 const stats = ref({ total_itens: 0, itens_criticos: 0, movimentacoes_hoje: 0 })
 const totalCategorias = ref(0)
@@ -228,21 +241,22 @@ const chartOptions = {
   plugins: {
     legend: { display: false },
     tooltip: {
-      backgroundColor: '#1E40AF',
-      titleFont: { size: 12 },
-      bodyFont: { size: 11 },
+      backgroundColor: '#0F172A',
+      titleFont: { size: 12, family: 'Inter' },
+      bodyFont: { size: 11, family: 'Inter' },
       cornerRadius: 8,
+      padding: 10,
     },
   },
   scales: {
     y: {
       beginAtZero: true,
-      grid: { color: '#F3F4F6' },
-      ticks: { font: { size: 11 } },
+      grid: { color: '#F1F5F9' },
+      ticks: { font: { size: 11, family: 'Inter' }, color: '#94A3B8' },
     },
     x: {
       grid: { display: false },
-      ticks: { font: { size: 11 } },
+      ticks: { font: { size: 11, family: 'Inter' }, color: '#64748B' },
     },
   },
 }
@@ -251,11 +265,8 @@ function formatDate(dateStr) {
   if (!dateStr) return '—'
   const d = new Date(dateStr)
   return d.toLocaleString('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
+    day: '2-digit', month: '2-digit', year: '2-digit',
+    hour: '2-digit', minute: '2-digit',
   })
 }
 
@@ -273,7 +284,6 @@ async function fetchData() {
     lowStockItems.value = lowRes.data
     recentTransacoes.value = transRes.data.slice(0, 8)
 
-    // Build chart from categories + items
     const categorias = categoriasRes.data
     const itensRes = await api.get('/itens/')
     const itens = itensRes.data
@@ -297,12 +307,12 @@ async function fetchData() {
             label: 'Quantidade em Estoque',
             data,
             backgroundColor: [
-              'rgba(220, 38, 38, 0.8)',
-              'rgba(30, 64, 175, 0.8)',
-              'rgba(245, 158, 11, 0.8)',
-              'rgba(5, 150, 105, 0.8)',
-              'rgba(139, 92, 246, 0.8)',
-              'rgba(236, 72, 153, 0.8)',
+              'rgba(220, 38, 38, 0.75)',
+              'rgba(124, 58, 237, 0.75)',
+              'rgba(5, 150, 105, 0.75)',
+              'rgba(67, 56, 202, 0.75)',
+              'rgba(234, 88, 12, 0.75)',
+              'rgba(236, 72, 153, 0.75)',
             ],
             borderRadius: 8,
             barThickness: 40,

@@ -2,28 +2,29 @@
   <div class="space-y-6">
     <!-- Header with actions -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-      <div>
-        <h2 class="text-xl font-bold text-gray-800">Suprimentos Pokémon</h2>
-        <p class="text-sm text-gray-500">Gerencie todos os itens do inventário</p>
+      <div class="flex items-center gap-3">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png" class="w-8 h-8 image-pixelated" />
+        <div>
+          <h2 class="text-xl font-bold text-slate-800">Suprimentos Pokémon</h2>
+          <p class="text-sm text-slate-400">Gerencie todos os itens do inventário</p>
+        </div>
       </div>
       <div class="flex items-center gap-3">
-        <!-- Filter: Low stock -->
         <button
           @click="toggleLowStock"
           :class="[
-            'flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all border',
+            'btn-pokemon text-xs border',
             showLowStock
               ? 'bg-red-50 text-red-700 border-red-200'
-              : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+              : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
           ]"
         >
-          <ExclamationTriangleIcon class="w-4 h-4" />
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/x-attack.png" class="w-4 h-4 image-pixelated" />
           Estoque Baixo
         </button>
-        <!-- Add item -->
         <button
           @click="openCreateModal"
-          class="flex items-center gap-2 bg-pokeblue hover:bg-pokeblue-dark text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm"
+          class="btn-pokemon bg-pokeblue hover:bg-pokeblue-dark text-white"
         >
           <PlusIcon class="w-4 h-4" />
           Novo Item
@@ -32,81 +33,80 @@
     </div>
 
     <!-- Search -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+    <div class="card-pokemon p-4">
       <div class="relative">
-        <MagnifyingGlassIcon class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
+        <MagnifyingGlassIcon class="w-5 h-5 text-slate-400 absolute left-3 top-2.5" />
         <input
           v-model="searchQuery"
           type="text"
           placeholder="Buscar item por nome..."
-          class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue focus:border-transparent"
+          class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue/30 focus:border-pokeblue"
         />
       </div>
     </div>
 
     <!-- Items table -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="card-pokemon overflow-hidden">
       <div v-if="loading" class="flex items-center justify-center h-48">
         <div class="w-10 h-10 border-4 border-pokeblue border-t-transparent rounded-full pokespin"></div>
       </div>
-      <div v-else-if="filteredItems.length === 0" class="flex flex-col items-center justify-center py-16 text-gray-400">
-        <CubeIcon class="w-12 h-12 mb-3" />
+      <div v-else-if="filteredItems.length === 0" class="flex flex-col items-center justify-center py-16 text-slate-400">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" class="w-12 h-12 image-pixelated mb-3 opacity-30" />
         <p class="text-sm">{{ searchQuery ? 'Nenhum item encontrado.' : 'Nenhum item cadastrado ainda.' }}</p>
       </div>
       <div v-else class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="bg-gray-50 text-xs text-gray-500 uppercase">
-              <th class="py-3 px-4 text-left font-medium">Item</th>
-              <th class="py-3 px-4 text-left font-medium">Categoria</th>
-              <th class="py-3 px-4 text-center font-medium">Quantidade</th>
-              <th class="py-3 px-4 text-center font-medium">Limite Mín.</th>
-              <th class="py-3 px-4 text-right font-medium">Preço Unit.</th>
-              <th class="py-3 px-4 text-center font-medium">Status</th>
-              <th class="py-3 px-4 text-center font-medium">Ações</th>
+            <tr class="bg-slate-50/80 text-[10px] text-slate-400 uppercase tracking-wider">
+              <th class="py-3 px-4 text-left font-semibold">Item</th>
+              <th class="py-3 px-4 text-left font-semibold">Categoria</th>
+              <th class="py-3 px-4 text-center font-semibold">Quantidade</th>
+              <th class="py-3 px-4 text-center font-semibold">Limite Mín.</th>
+              <th class="py-3 px-4 text-right font-semibold">Preço Unit.</th>
+              <th class="py-3 px-4 text-center font-semibold">Status</th>
+              <th class="py-3 px-4 text-center font-semibold">Ações</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-50">
-            <tr v-for="item in filteredItems" :key="item.id" class="table-row-hover">
+          <tbody class="divide-y divide-slate-50">
+            <tr v-for="item in filteredItems" :key="item.id" class="table-row-hover group">
               <td class="py-3 px-4">
                 <div class="flex items-center gap-3">
-                  <div v-if="item.imagem" class="w-10 h-10 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
-                    <img :src="item.imagem" :alt="item.nome" class="w-full h-full object-cover" />
-                  </div>
-                  <div v-else class="w-10 h-10 rounded-lg bg-gradient-to-br from-pokeblue/10 to-pokered/10 flex items-center justify-center flex-shrink-0">
-                    <CubeIcon class="w-5 h-5 text-pokeblue" />
-                  </div>
-                  <span class="font-medium text-gray-800">{{ item.nome }}</span>
+                  <SpriteIcon :name="item.nome" size="md" />
+                  <span class="font-medium text-slate-800">{{ item.nome }}</span>
                 </div>
               </td>
               <td class="py-3 px-4">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
+                <span :class="[
+                  'badge-pokemon',
+                  getCategoryColor(item.categoria_nome).bg,
+                  getCategoryColor(item.categoria_nome).text
+                ]">
                   {{ item.categoria_nome }}
                 </span>
               </td>
-              <td class="py-3 px-4 text-center font-semibold" :class="item.status_estoque === 'CRITICO' ? 'text-red-600' : 'text-gray-800'">
+              <td class="py-3 px-4 text-center font-semibold" :class="item.status_estoque === 'CRITICO' ? 'text-red-600' : 'text-slate-800'">
                 {{ item.quantidade }}
               </td>
-              <td class="py-3 px-4 text-center text-gray-500">{{ item.limite_minimo }}</td>
-              <td class="py-3 px-4 text-right text-gray-700 font-medium">
+              <td class="py-3 px-4 text-center text-slate-400">{{ item.limite_minimo }}</td>
+              <td class="py-3 px-4 text-right text-slate-700 font-medium">
                 {{ formatCurrency(item.preco_unitario) }}
               </td>
               <td class="py-3 px-4 text-center">
                 <span :class="[
-                  'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold',
+                  'badge-pokemon',
                   item.status_estoque === 'CRITICO'
                     ? 'bg-red-100 text-red-700'
-                    : 'bg-green-100 text-green-700'
+                    : 'bg-emerald-100 text-emerald-700'
                 ]">
                   {{ item.status_estoque === 'CRITICO' ? '⚠ Crítico' : '✓ OK' }}
                 </span>
               </td>
               <td class="py-3 px-4 text-center">
-                <div class="flex items-center justify-center gap-1">
-                  <button @click="openEditModal(item)" class="p-1.5 rounded-lg hover:bg-blue-50 text-gray-400 hover:text-pokeblue transition-colors" title="Editar">
+                <div class="flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button @click="openEditModal(item)" class="p-1.5 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-pokeblue transition-colors" title="Editar">
                     <PencilSquareIcon class="w-4 h-4" />
                   </button>
-                  <button @click="confirmDelete(item)" class="p-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-pokered transition-colors" title="Excluir">
+                  <button @click="confirmDelete(item)" class="p-1.5 rounded-lg hover:bg-red-50 text-slate-400 hover:text-pokered transition-colors" title="Excluir">
                     <TrashIcon class="w-4 h-4" />
                   </button>
                 </div>
@@ -121,40 +121,48 @@
     <ModalDialog :show="showModal" :title="editingItem ? 'Editar Item' : 'Novo Item'" @close="closeModal">
       <form @submit.prevent="saveItem" class="space-y-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Nome do Item</label>
-          <input v-model="form.nome" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue" placeholder="Ex: Ultra Ball" />
+          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Nome do Item</label>
+          <input v-model="form.nome" required class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue/30 focus:border-pokeblue bg-slate-50 focus:bg-white" placeholder="Ex: Ultra Ball" />
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
-          <select v-model="form.categoria" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue bg-white">
+          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Categoria</label>
+          <select v-model="form.categoria" required class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue/30 focus:border-pokeblue bg-slate-50 focus:bg-white">
             <option value="" disabled>Selecione uma categoria</option>
             <option v-for="cat in categorias" :key="cat.id" :value="cat.id">{{ cat.nome }}</option>
           </select>
         </div>
         <div class="grid grid-cols-3 gap-3">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Quantidade</label>
-            <input v-model.number="form.quantidade" type="number" min="0" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue" />
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Quantidade</label>
+            <input v-model.number="form.quantidade" type="number" min="0" required class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue/30 bg-slate-50 focus:bg-white" />
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Limite Mín.</label>
-            <input v-model.number="form.limite_minimo" type="number" min="0" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue" />
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Limite Mín.</label>
+            <input v-model.number="form.limite_minimo" type="number" min="0" required class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue/30 bg-slate-50 focus:bg-white" />
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Preço (P$)</label>
-            <input v-model.number="form.preco_unitario" type="number" step="0.01" min="0" required class="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue" />
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Preço (P$)</label>
+            <input v-model.number="form.preco_unitario" type="number" step="0.01" min="0" required class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pokeblue/30 bg-slate-50 focus:bg-white" />
           </div>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Imagem (opcional)</label>
-          <input type="file" accept="image/*" @change="handleImage" class="w-full text-sm text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-pokeblue hover:file:bg-blue-100" />
+          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Imagem (opcional)</label>
+          <input type="file" accept="image/*" @change="handleImage" class="w-full text-sm text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-pokeblue hover:file:bg-blue-100" />
+        </div>
+        <!-- Sprite preview -->
+        <div v-if="form.nome" class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
+          <SpriteIcon :name="form.nome" size="lg" />
+          <div>
+            <p class="text-xs font-medium text-slate-600">Preview do Sprite</p>
+            <p class="text-[10px] text-slate-400">Sprite automático baseado no nome do item</p>
+          </div>
         </div>
         <div v-if="formError" class="text-sm text-red-600 bg-red-50 p-3 rounded-xl">{{ formError }}</div>
       </form>
       <template #footer>
         <div class="flex justify-end gap-3">
-          <button @click="closeModal" class="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">Cancelar</button>
-          <button @click="saveItem" :disabled="saving" class="px-6 py-2 bg-pokeblue hover:bg-pokeblue-dark text-white rounded-xl text-sm font-semibold transition-all disabled:opacity-50">
+          <button @click="closeModal" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors">Cancelar</button>
+          <button @click="saveItem" :disabled="saving" class="btn-pokemon bg-pokeblue hover:bg-pokeblue-dark text-white disabled:opacity-50">
             {{ saving ? 'Salvando...' : (editingItem ? 'Atualizar' : 'Criar Item') }}
           </button>
         </div>
@@ -163,14 +171,17 @@
 
     <!-- Delete confirmation -->
     <ModalDialog :show="showDeleteModal" title="Confirmar Exclusão" @close="showDeleteModal = false">
-      <p class="text-sm text-gray-600">
-        Tem certeza que deseja excluir o item <strong class="text-gray-800">{{ deletingItem?.nome }}</strong>?
-        Esta ação não pode ser desfeita.
-      </p>
+      <div class="flex items-center gap-3 mb-4">
+        <SpriteIcon :name="deletingItem?.nome" size="lg" />
+        <p class="text-sm text-slate-600">
+          Tem certeza que deseja excluir <strong class="text-slate-800">{{ deletingItem?.nome }}</strong>?
+          Esta ação não pode ser desfeita.
+        </p>
+      </div>
       <template #footer>
         <div class="flex justify-end gap-3">
-          <button @click="showDeleteModal = false" class="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">Cancelar</button>
-          <button @click="deleteItem" :disabled="deleting" class="px-6 py-2 bg-pokered hover:bg-pokered-dark text-white rounded-xl text-sm font-semibold transition-all disabled:opacity-50">
+          <button @click="showDeleteModal = false" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors">Cancelar</button>
+          <button @click="deleteItem" :disabled="deleting" class="btn-pokemon bg-pokered hover:bg-pokered-dark text-white disabled:opacity-50">
             {{ deleting ? 'Excluindo...' : 'Excluir' }}
           </button>
         </div>
@@ -183,13 +194,13 @@
 import { ref, computed, onMounted } from 'vue'
 import api from '../services/api'
 import ModalDialog from '../components/ModalDialog.vue'
+import SpriteIcon from '../components/SpriteIcon.vue'
+import { getCategoryColor } from '../utils/sprites'
 import {
   PlusIcon,
   MagnifyingGlassIcon,
   PencilSquareIcon,
   TrashIcon,
-  CubeIcon,
-  ExclamationTriangleIcon,
 } from '@heroicons/vue/24/outline'
 
 const items = ref([])

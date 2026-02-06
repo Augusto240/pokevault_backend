@@ -3,43 +3,45 @@
     <!-- Sidebar -->
     <aside
       :class="[
-        'fixed inset-y-0 left-0 z-30 flex flex-col bg-sidebar text-white transition-all duration-300',
-        sidebarOpen ? 'w-64' : 'w-20',
+        'fixed inset-y-0 left-0 z-30 flex flex-col bg-sidebar text-white transition-all duration-300 ease-in-out',
+        sidebarOpen ? 'w-64' : 'w-[72px]',
       ]"
     >
       <!-- Logo -->
-      <div class="flex items-center gap-3 px-4 h-16 border-b border-white/10">
-        <div class="w-10 h-10 flex-shrink-0 relative">
-          <!-- Pokéball SVG icon -->
-          <svg viewBox="0 0 100 100" class="w-full h-full">
-            <circle cx="50" cy="50" r="48" fill="#DC2626" stroke="#333" stroke-width="4"/>
-            <rect x="0" y="46" width="100" height="8" fill="#333"/>
-            <circle cx="50" cy="50" r="48" fill="none" stroke="#333" stroke-width="4"/>
-            <path d="M 0 50 Q 0 50 0 50 A 48 48 0 0 1 100 50 L 100 50 Z" fill="#DC2626"/>
-            <path d="M 0 50 Q 0 50 0 50 A 48 48 0 0 0 100 50 L 100 50 Z" fill="white"/>
-            <rect x="0" y="47" width="100" height="6" fill="#333"/>
-            <circle cx="50" cy="50" r="16" fill="white" stroke="#333" stroke-width="4"/>
-            <circle cx="50" cy="50" r="8" fill="#333"/>
-          </svg>
+      <div class="flex items-center gap-3 px-4 h-16 border-b border-white/5">
+        <div class="w-10 h-10 flex-shrink-0 flex items-center justify-center">
+          <img
+            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
+            alt="PokéBall"
+            class="w-8 h-8 image-pixelated drop-shadow-md pokebounce"
+          />
         </div>
         <transition name="fade">
           <div v-if="sidebarOpen" class="overflow-hidden whitespace-nowrap">
-            <h1 class="text-lg font-bold tracking-tight">PokéVault</h1>
-            <p class="text-[10px] text-gray-400 -mt-1 uppercase tracking-widest">Supply HQ</p>
+            <h1 class="font-pixel text-[10px] text-white tracking-tight leading-none">PokéVault</h1>
+            <p class="text-[9px] text-slate-500 mt-1.5 uppercase tracking-widest font-medium">Supply HQ</p>
           </div>
         </transition>
       </div>
 
       <!-- Nav links -->
-      <nav class="flex-1 py-4 space-y-1 overflow-y-auto">
+      <nav class="flex-1 py-4 space-y-0.5 overflow-y-auto px-2">
         <router-link
           v-for="item in navItems"
           :key="item.to"
           :to="item.to"
-          class="nav-link flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-gray-300 hover:bg-sidebar-hover hover:text-white transition-colors"
-          active-class="!bg-pokeblue !text-white"
+          :class="[
+            'nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-sidebar-hover hover:text-white transition-all duration-200 group',
+          ]"
+          :active-class="'nav-link-active !text-white'"
         >
-          <component :is="item.icon" class="w-5 h-5 flex-shrink-0" />
+          <div class="w-8 h-8 flex items-center justify-center flex-shrink-0">
+            <img
+              :src="item.sprite"
+              :alt="item.label"
+              class="w-6 h-6 image-pixelated drop-shadow-sm group-hover:scale-110 transition-transform duration-200"
+            />
+          </div>
           <transition name="fade">
             <span v-if="sidebarOpen" class="text-sm font-medium">{{ item.label }}</span>
           </transition>
@@ -47,22 +49,25 @@
       </nav>
 
       <!-- User profile footer -->
-      <div class="border-t border-white/10 p-4">
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-full bg-pokeblue flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+      <div class="border-t border-white/5 p-3">
+        <div class="flex items-center gap-3 px-1">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-pokeblue to-pokeblue-dark flex items-center justify-center text-white text-xs font-bold flex-shrink-0 shadow-md">
             {{ userInitials }}
           </div>
           <transition name="fade">
-            <div v-if="sidebarOpen" class="overflow-hidden">
+            <div v-if="sidebarOpen" class="overflow-hidden flex-1 min-w-0">
               <p class="text-sm font-medium text-white truncate">{{ authStore.userName }}</p>
-              <p class="text-xs text-gray-400">{{ authStore.user?.role }}</p>
+              <p class="text-[10px] text-slate-500 flex items-center gap-1">
+                <span :class="authStore.isGerente ? 'text-pokeyellow' : 'text-pokeblue-light'">{{ authStore.user?.role === 'GERENTE' ? '★' : '◆' }}</span>
+                {{ authStore.user?.role }}
+              </p>
             </div>
           </transition>
         </div>
         <button
           v-if="sidebarOpen"
           @click="handleLogout"
-          class="mt-3 w-full flex items-center gap-2 justify-center text-xs text-gray-400 hover:text-pokered-light py-1.5 rounded border border-white/10 hover:border-pokered/40 transition-colors"
+          class="mt-3 w-full flex items-center gap-2 justify-center text-xs text-slate-500 hover:text-pokered-light py-2 rounded-xl border border-white/5 hover:border-pokered/30 hover:bg-pokered/5 transition-all"
         >
           <ArrowRightOnRectangleIcon class="w-4 h-4" />
           Sair do Sistema
@@ -71,28 +76,27 @@
     </aside>
 
     <!-- Main content -->
-    <div :class="['flex-1 transition-all duration-300', sidebarOpen ? 'ml-64' : 'ml-20']">
+    <div :class="['flex-1 transition-all duration-300', sidebarOpen ? 'ml-64' : 'ml-[72px]']">
       <!-- Top bar -->
-      <header class="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-gray-200 h-16 flex items-center justify-between px-6">
+      <header class="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 h-14 flex items-center justify-between px-6">
         <div class="flex items-center gap-4">
-          <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors">
+          <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-lg hover:bg-slate-100 text-slate-400 transition-colors">
             <Bars3Icon class="w-5 h-5" />
           </button>
           <div>
-            <h2 class="text-lg font-semibold text-gray-800">{{ currentPageTitle }}</h2>
-            <p class="text-xs text-gray-400">PokéMart Distribution Center</p>
+            <h2 class="text-sm font-semibold text-slate-800">{{ currentPageTitle }}</h2>
           </div>
         </div>
         <div class="flex items-center gap-3">
-          <div class="hidden sm:flex items-center gap-2 text-xs text-gray-400 bg-gray-50 px-3 py-1.5 rounded-full">
-            <span class="w-2 h-2 bg-success rounded-full"></span>
-            Sistema Online
+          <div class="hidden sm:flex items-center gap-2 text-[11px] text-slate-400 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">
+            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span>
+            Online
           </div>
         </div>
       </header>
 
       <!-- Page content -->
-      <main class="p-6 bg-pokeball-pattern min-h-[calc(100vh-4rem)]">
+      <main class="p-6 bg-pokeball-pattern min-h-[calc(100vh-3.5rem)]">
         <router-view v-slot="{ Component }">
           <transition name="fade" mode="out-in">
             <component :is="Component" />
@@ -107,13 +111,8 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
+import { getSpriteBySlug } from '../utils/sprites'
 import {
-  HomeIcon,
-  CubeIcon,
-  TagIcon,
-  ArrowsRightLeftIcon,
-  UsersIcon,
-  ChartBarIcon,
   Bars3Icon,
   ArrowRightOnRectangleIcon,
 } from '@heroicons/vue/24/outline'
@@ -125,14 +124,14 @@ const sidebarOpen = ref(true)
 
 const navItems = computed(() => {
   const items = [
-    { to: '/', label: 'Dashboard', icon: HomeIcon },
-    { to: '/inventario', label: 'Inventário', icon: CubeIcon },
-    { to: '/categorias', label: 'Categorias', icon: TagIcon },
-    { to: '/transacoes', label: 'Transações', icon: ArrowsRightLeftIcon },
-    { to: '/relatorios', label: 'Relatórios', icon: ChartBarIcon },
+    { to: '/', label: 'Dashboard', sprite: getSpriteBySlug('poke-ball') },
+    { to: '/inventario', label: 'Inventário', sprite: getSpriteBySlug('ultra-ball') },
+    { to: '/categorias', label: 'Categorias', sprite: getSpriteBySlug('oran-berry') },
+    { to: '/transacoes', label: 'Transações', sprite: getSpriteBySlug('rare-candy') },
+    { to: '/relatorios', label: 'Relatórios', sprite: getSpriteBySlug('exp-share') },
   ]
   if (authStore.isGerente) {
-    items.splice(4, 0, { to: '/usuarios', label: 'Usuários', icon: UsersIcon })
+    items.splice(4, 0, { to: '/usuarios', label: 'Usuários', sprite: getSpriteBySlug('lucky-egg') })
   }
   return items
 })

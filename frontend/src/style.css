@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 /* ══════════════════════════════════════════════════════
-   PokéVault — Corporate PokéMart Theme
+   PokéVault — Pokémon World Supply System Theme
+   Minimalist + Game-Inspired Aesthetic
    ══════════════════════════════════════════════════════ */
 
 @theme {
@@ -15,9 +16,10 @@
   --color-pokeyellow-dark: #B45309;
   --color-pokeyellow-light: #FDE68A;
   --color-pokegold: #D97706;
-  --color-sidebar: #111827;
-  --color-sidebar-hover: #1F2937;
-  --color-surface: #F9FAFB;
+  --color-sidebar: #0F172A;
+  --color-sidebar-hover: #1E293B;
+  --color-sidebar-active: #1E40AF;
+  --color-surface: #F8FAFC;
   --color-card: #FFFFFF;
   --color-success: #059669;
   --color-danger: #DC2626;
@@ -25,28 +27,42 @@
   --color-info: #2563EB;
 }
 
-/* Base font */
+/* ── Base ── */
 body {
   font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background-color: #F3F4F6;
+  background-color: #F1F5F9;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar */
+/* ── Pixel font for game headings ── */
+.font-pixel {
+  font-family: 'Press Start 2P', monospace;
+}
+
+/* ── Pixel-perfect sprite rendering ── */
+.image-pixelated {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* ── Custom scrollbar ── */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #93C5FD;
-  border-radius: 3px;
+  background: #CBD5E1;
+  border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #1E40AF;
+  background: #94A3B8;
 }
 
-/* Pokéball spinner animation */
+/* ── Pokéball spinner ── */
 @keyframes pokespin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -55,7 +71,37 @@ body {
   animation: pokespin 1s linear infinite;
 }
 
-/* Fade transitions for router */
+/* ── Bounce animation for sprites ── */
+@keyframes pokebounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.pokebounce {
+  animation: pokebounce 2s ease-in-out infinite;
+}
+
+/* ── Gentle float ── */
+@keyframes pokefloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-3px) rotate(1deg); }
+  75% { transform: translateY(2px) rotate(-1deg); }
+}
+.pokefloat {
+  animation: pokefloat 4s ease-in-out infinite;
+}
+
+/* ── Shimmer effect for loading ── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* ── Fade transitions for router ── */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;
@@ -65,26 +111,26 @@ body {
   opacity: 0;
 }
 
-/* Slide up for modals */
+/* ── Slide up for modals ── */
 .slide-up-enter-active,
 .slide-up-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .slide-up-enter-from,
 .slide-up-leave-to {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(12px) scale(0.98);
 }
 
-/* Table row hover */
+/* ── Table row hover ── */
 .table-row-hover {
   transition: background-color 0.15s ease;
 }
 .table-row-hover:hover {
-  background-color: #EFF6FF;
+  background-color: #F1F5F9;
 }
 
-/* Status badge pulse */
+/* ── Status badge pulse ── */
 @keyframes pulse-red {
   0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
   50% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
@@ -93,13 +139,67 @@ body {
   animation: pulse-red 2s infinite;
 }
 
-/* Gradient backgrounds */
+/* ── Gradient backgrounds ── */
 .bg-pokemart-gradient {
-  background: linear-gradient(135deg, #1E40AF 0%, #111827 100%);
+  background: linear-gradient(135deg, #0F172A 0%, #1E3A5F 50%, #1E40AF 100%);
 }
 
 .bg-pokeball-pattern {
-  background-image: radial-gradient(circle at 20% 50%, rgba(220, 38, 38, 0.05) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 20%, rgba(30, 64, 175, 0.05) 0%, transparent 50%),
-                    radial-gradient(circle at 60% 80%, rgba(245, 158, 11, 0.05) 0%, transparent 50%);
+  background-image:
+    radial-gradient(circle at 15% 85%, rgba(220, 38, 38, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 85% 15%, rgba(30, 64, 175, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.02) 0%, transparent 60%);
+}
+
+/* ── Game-style card with subtle pixel border feel ─ */
+.card-pokemon {
+  background: white;
+  border-radius: 1rem;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.card-pokemon:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
+  transform: translateY(-1px);
+}
+
+/* ── Pokémon type-style badge ── */
+.badge-pokemon {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+/* ── Sidebar nav link active state ── */
+.nav-link-active {
+  background: linear-gradient(135deg, #1E40AF, #2563EB);
+  box-shadow: 0 0 12px rgba(30, 64, 175, 0.3);
+}
+
+/* ── Button game-style ── */
+.btn-pokemon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: 0.75rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.btn-pokemon:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+.btn-pokemon:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
