@@ -21,7 +21,7 @@
           class="w-7 h-7 image-pixelated drop-shadow-sm"
           loading="lazy"
         />
-        <component v-else :is="iconComponent" :class="['w-6 h-6', textColor]" v-if="iconComponent" />
+        <span v-else :class="['text-lg font-bold', textColor]">?</span>
       </div>
     </div>
   </div>
@@ -34,7 +34,6 @@ const props = defineProps({
   title: String,
   value: [Number, String],
   subtitle: String,
-  icon: String,
   sprite: { type: String, default: '' },
   color: { type: String, default: 'blue' },
   loading: Boolean,

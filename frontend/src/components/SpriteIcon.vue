@@ -16,7 +16,7 @@
       loading="lazy"
       @error="handleError"
     />
-    <span v-else :class="['font-bold text-gray-400', fallbackTextClass]">?</span>
+    <span v-else :class="['font-bold text-slate-400', fallbackTextClass]">?</span>
   </div>
 </template>
 

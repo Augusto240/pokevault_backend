@@ -8,7 +8,7 @@
         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png" class="w-14 h-14 image-pixelated pokefloat" style="animation-delay: 1s;" />
       </div>
       <div class="relative z-10">
-        <h1 class="font-pixel text-xs leading-relaxed">Bem-vindo ao PokéVault!</h1>
+        <h1 class="font-pixel text-sm sm:text-base leading-loose">Bem-vindo ao PokéVault!</h1>
         <p class="text-blue-200/80 mt-2 text-sm">Centro de Distribuição — Visão geral do estoque e movimentações</p>
       </div>
     </div>

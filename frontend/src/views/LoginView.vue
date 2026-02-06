@@ -41,8 +41,8 @@
         
         <div class="p-8">
           <div class="mb-6">
-            <h2 class="text-lg font-semibold text-gray-800">Acesso ao Sistema</h2>
-            <p class="text-sm text-gray-400 mt-1">Insira suas credenciais corporativas</p>
+            <h2 class="text-lg font-semibold text-slate-800">Acesso ao Sistema</h2>
+            <p class="text-sm text-slate-400 mt-1">Insira suas credenciais corporativas</p>
           </div>
 
           <!-- Error message -->
@@ -55,7 +55,7 @@
 
           <form @submit.prevent="handleLogin" class="space-y-5">
             <div>
-              <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">E-mail</label>
+              <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">E-mail</label>
               <div class="relative">
                 <input
                   v-model="email"
@@ -71,7 +71,7 @@
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Senha</label>
+              <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Senha</label>
               <div class="relative">
                 <input
                   v-model="password"

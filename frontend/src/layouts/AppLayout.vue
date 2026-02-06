@@ -99,7 +99,7 @@
       <main class="p-6 bg-pokeball-pattern min-h-[calc(100vh-3.5rem)]">
         <router-view v-slot="{ Component }">
           <transition name="fade" mode="out-in">
-            <component :is="Component" />
+            <component :is="Component" :key="route.path" />
           </transition>
         </router-view>
       </main>

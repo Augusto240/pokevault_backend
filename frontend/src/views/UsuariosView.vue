@@ -197,10 +197,6 @@ const form = ref({
   password: '',
 })
 
-function getInitials(u) {
-  return ((u.first_name?.[0] || '') + (u.last_name?.[0] || '')).toUpperCase() || '?'
-}
-
 function openCreate() {
   editing.value = null
   form.value = { first_name: '', last_name: '', username: '', email: '', matricula: '', role: 'ESTOQUISTA', password: '' }
